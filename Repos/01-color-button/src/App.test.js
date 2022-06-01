@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 
 test('button has correct intial color', () => {
@@ -11,8 +11,21 @@ test('button has correct intial color', () => {
   expect(colorButton).toHaveStyle({backgroundColor: 'red'})
 })
 test('button has correct initial text', () => {
-
+  render(<App />);
+  const colorButton = screen.getByRole('button', {name: 'Change to blue'})
+  expect(colorButton.textContent).toBe('Change to blue')
 })
+/*
+  With functional testing, we could have all these assertions in just one tests.
+*/
 test('button turns blue when clicked', () => {
+  render(<App />);
+  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  fireEvent.click(colorButton);
+  // expect the background color to be blue
+  expect(colorButton).toHaveStyle({backgroundColor: 'blue'});
 
+  // expect the button text to be 'Change to red'
+  expect(colorButton.textContent).toBe('Change to red')
 })
+
