@@ -41,3 +41,34 @@ test('Initial Conditions', () => {
   const checkbox = screen.getByRole('checkbox');
   expect(checkbox).not.toBeChecked();
 })
+
+/* 
+Code Quiz: Add checkbox functionality. We want to make sure that the button is 
+enabled before the checkbox is checked and then after the checkbox is checked,
+the button should be disabled.  
+- fireEvent.click
+- 2x in test: once to disable, once to re-enable
+- Assertions on button
+  expect(button).toBeEnabled()
+  expect(button).toBeDisabled()
+
+Guidance on React code:
+  - Checkbox controls button via boolean state:
+  - state determines value of disabled attribute on button
+  - I recommend calling state disabled, defaulting to false
+  - onChange for checkbox
+*/ 
+
+test('Test checkbox functionality', () => {
+  render(<App />);
+  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  const checkbox = screen.getByRole('checkbox');
+  // First click on checkbox
+  fireEvent.click(checkbox);
+  expect(checkbox).toBeChecked();
+  expect(colorButton).toBeDisabled();
+  // Second click on checkbox
+  fireEvent.click(checkbox);
+  expect(checkbox).not.toBeChecked();
+  expect(colorButton).toBeEnabled();
+})
