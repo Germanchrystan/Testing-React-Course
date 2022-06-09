@@ -61,8 +61,12 @@ Guidance on React code:
 
 test('Test checkbox functionality', () => {
   render(<App />);
+  /*
+  Now, how can we identify a checkbox in particular if there are several
+  checkboxes in our component. That is when labels come into place.
+  */
   const colorButton = screen.getByRole('button', {name: 'Change to blue'});
-  const checkbox = screen.getByRole('checkbox');
+  const checkbox = screen.getByLabelText('Disable button');
   // First click on checkbox
   fireEvent.click(checkbox);
   expect(checkbox).toBeChecked();
@@ -71,4 +75,36 @@ test('Test checkbox functionality', () => {
   fireEvent.click(checkbox);
   expect(checkbox).not.toBeChecked();
   expect(colorButton).toBeEnabled();
+})
+/*
+Code Quiz: We want some visual indication when the button is siabled.
+So we wan to turn the button gray. 
+Test flows(simulate possible user flows):
+* Flow 1: disable button -> button is gray -> enable button -> button is red
+* Flow 2: click button to change color -> disable button -> button is gray -> enable button -> button is blue
+
+Assertion at the end of each flow is neccesary. 
+*/
+
+test("Test button color when disabled (flow 1)", () => {
+  render(<App />);
+  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  const checkbox = screen.getByLabelText('Disable button');
+
+  fireEvent.click(checkbox);
+  expect(colorButton).toHaveStyle({backgroundColor: 'gray'});
+  fireEvent.click(checkbox);
+  expect(colorButton).toHaveStyle({backgroundColor: 'red'});
+})
+
+test("Test button color when disabled (flow 2)", () => {
+  render(<App />);
+  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  const checkbox = screen.getByLabelText('Disable button');
+
+  fireEvent.click(colorButton);
+  fireEvent.click(checkbox);
+  expect(colorButton).toHaveStyle({backgroundColor: 'gray'});
+  fireEvent.click(checkbox);
+  expect(colorButton).toHaveStyle({backgroundColor: 'blue'});
 })

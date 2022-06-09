@@ -9,6 +9,7 @@ function App() {
   const handleButtonClick = () => {
     setButtonColor(newButtonColor)
     newButtonColor = buttonColor === 'red' ? 'blue' : 'red';
+
   }
 
   const handleCheckboxClick = (event) => {
@@ -19,15 +20,18 @@ function App() {
     <div className="App">
       <button 
       disabled={disabled}
-      style={{backgroundColor: buttonColor}}
+      style={{backgroundColor: disabled ? 'gray' : buttonColor}}
       onClick={handleButtonClick}
       >
         Change to { newButtonColor }
       </button>
-      <input type="checkbox" 
+      <input 
+      type="checkbox" 
+      id="disable-button-checkbox"
       onChange={handleCheckboxClick}
       defaultChecked={disabled}
       />
+      <label htmlFor='disable-button-checkbox'>Disable button</label>
     </div>
   );
 }
