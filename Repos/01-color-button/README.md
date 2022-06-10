@@ -49,3 +49,13 @@ It is recommended to unit test this functions if:
 * Too many edge cases.
 
 This color button project is not going to have any functions that really merit unit testing.
+
+When to unit test?
+* replaceCamelWithSpaces is pretty simple.
+* Could be covered by functional tests on button.
+For more complicated functions, unit tests help with: 
+* Covering all possible edge cases.
+* Determining what caused functional tests to fail.
+Issue with functional tests: 
+* High-level makes them resistant to refactors. 
+* High-level makes them difficult to diagnose in case of error.

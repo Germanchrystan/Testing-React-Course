@@ -5,29 +5,29 @@ import {replaceCamelWithSpaces} from './App';
 test('button has correct intial color', () => {
   render(<App />);
   // finding by role (prefered method) the element with button role and text 'Change to blue'
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'})
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'})
 
   // For testing the color of the button, we should use Jest DOM
   // toHaveStyle custom matcher
-  expect(colorButton).toHaveStyle({backgroundColor: 'red'})
+  expect(colorButton).toHaveStyle({backgroundColor: 'MediumVioletRed'})
 })
 test('button has correct initial text', () => {
   render(<App />);
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'})
-  expect(colorButton.textContent).toBe('Change to blue')
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'})
+  expect(colorButton.textContent).toBe('Change to Midnight Blue')
 })
 /*
   With functional testing, we could have all these assertions in just one tests.
 */
 test('button turns blue when clicked', () => {
   render(<App />);
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'});
   fireEvent.click(colorButton);
   // expect the background color to be blue
-  expect(colorButton).toHaveStyle({backgroundColor: 'blue'});
+  expect(colorButton).toHaveStyle({backgroundColor: 'MidnightBlue'});
 
-  // expect the button text to be 'Change to red'
-  expect(colorButton.textContent).toBe('Change to red')
+  // expect the button text to be 'Change to MediumVioletRed'
+  expect(colorButton.textContent).toBe('Change to Medium Violet Red')
 })
 
 // Testing the checkbox
@@ -35,7 +35,7 @@ test('Initial Conditions', () => {
   render(<App />);
 
   //Check that the button starts out enabled
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'});
   expect(colorButton).toBeEnabled(); // Matcher
 
   //Check that the checkbox starts out unchecked
@@ -66,7 +66,7 @@ test('Test checkbox functionality', () => {
   Now, how can we identify a checkbox in particular if there are several
   checkboxes in our component. That is when labels come into place.
   */
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'});
   const checkbox = screen.getByLabelText('Disable button');
   // First click on checkbox
   fireEvent.click(checkbox);
@@ -89,25 +89,25 @@ Assertion at the end of each flow is neccesary.
 
 test("Test button color when disabled (flow 1)", () => {
   render(<App />);
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'});
   const checkbox = screen.getByLabelText('Disable button');
 
   fireEvent.click(checkbox);
   expect(colorButton).toHaveStyle({backgroundColor: 'gray'});
   fireEvent.click(checkbox);
-  expect(colorButton).toHaveStyle({backgroundColor: 'red'});
+  expect(colorButton).toHaveStyle({backgroundColor: 'MediumVioletRed'});
 })
 
 test("Test button color when disabled (flow 2)", () => {
   render(<App />);
-  const colorButton = screen.getByRole('button', {name: 'Change to blue'});
+  const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'});
   const checkbox = screen.getByLabelText('Disable button');
 
   fireEvent.click(colorButton);
   fireEvent.click(checkbox);
   expect(colorButton).toHaveStyle({backgroundColor: 'gray'});
   fireEvent.click(checkbox);
-  expect(colorButton).toHaveStyle({backgroundColor: 'blue'});
+  expect(colorButton).toHaveStyle({backgroundColor: 'MidnightBlue'});
 })
 
 /*
@@ -124,3 +124,7 @@ describe('spaces before camel-case capital letters', () => {
     expect(replaceCamelWithSpaces('MediumVioletRed')).toBe('Medium Violet Red')
   })
 })
+
+/*
+Code Quiz: Change red to MediumVioletRed, and blue to MidnightBlue (Done in previous tests)
+*/
