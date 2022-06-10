@@ -36,3 +36,39 @@ expect(checkbox).toBeChecked();
 ESLint has the concept of plugins, which we can use to extend the rules for it. A mayor benefit of RTL and JestDOM is that they have excellent plugins. This rules enforce the best practices. The plugins are highly customizable, and we can decide which rules we want and which ones we don't. 
 For more information, you can check this [link] (https://github.com/testing-library/eslint-plugin-testing-library)
 And [this one](https://github.com/testing-library/eslint-plugin-jest-dom)
+
+We install this linters by entering the following command
+`
+npm install eslint-plugin-testing-library eslint-plugin-jest-dom
+`
+This will install the ESLint dependencies. Now, we have to go to the package.json, and delete the following part
+`
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+`
+In the root folder, we create a file called ``.eslintrc.json``. The file will contain the following settings:
+{
+    "plugins": [
+        "testing-library",
+        "jest-dom"
+    ],
+    "extends": [
+        "react-app",
+        "react-app/jest",
+        "plugin:testing-library/react",
+        "plugin:jest-dom/recommended"
+    ]
+}
+
+Now, in the root folder of the file we should also create a folder called ``.vscode`` with the file ``settings.json`` in it. The settings should be the following:
+{
+    "editor.codeActionsOnSave":
+    {
+        "source.fixAll.eslint": true
+    }
+}
+This folder, along with the ``eslintrc.json`` should be included in ``.gitignore``.

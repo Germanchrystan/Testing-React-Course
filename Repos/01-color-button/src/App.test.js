@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
-import {replaceCamelWithSpaces} from './App';
+import { replaceCamelWithSpaces } from './App';
 
 test('button has correct intial color', () => {
   render(<App />);
@@ -14,7 +14,7 @@ test('button has correct intial color', () => {
 test('button has correct initial text', () => {
   render(<App />);
   const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'})
-  expect(colorButton.textContent).toBe('Change to Midnight Blue')
+  expect(colorButton).toHaveTextContent('Change to Midnight Blue')
 })
 /*
   With functional testing, we could have all these assertions in just one tests.
@@ -27,7 +27,7 @@ test('button turns blue when clicked', () => {
   expect(colorButton).toHaveStyle({backgroundColor: 'MidnightBlue'});
 
   // expect the button text to be 'Change to MediumVioletRed'
-  expect(colorButton.textContent).toBe('Change to Medium Violet Red')
+  expect(colorButton).toHaveTextContent('Change to Medium Violet Red')
 })
 
 // Testing the checkbox
@@ -60,7 +60,7 @@ Guidance on React code:
   - onChange for checkbox
 */ 
 
-test('Test checkbox functionality', () => {
+test('Checkbox functionality', () => {
   render(<App />);
   /*
   Now, how can we identify a checkbox in particular if there are several
@@ -87,7 +87,7 @@ Test flows(simulate possible user flows):
 Assertion at the end of each flow is neccesary. 
 */
 
-test("Test button color when disabled (flow 1)", () => {
+test("Button color when disabled (flow 1)", () => {
   render(<App />);
   const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'});
   const checkbox = screen.getByLabelText('Disable button');
@@ -98,7 +98,7 @@ test("Test button color when disabled (flow 1)", () => {
   expect(colorButton).toHaveStyle({backgroundColor: 'MediumVioletRed'});
 })
 
-test("Test button color when disabled (flow 2)", () => {
+test("Button color when disabled (flow 2)", () => {
   render(<App />);
   const colorButton = screen.getByRole('button', {name: 'Change to Midnight Blue'});
   const checkbox = screen.getByLabelText('Disable button');
