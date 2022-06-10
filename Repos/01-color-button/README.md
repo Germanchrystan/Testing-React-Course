@@ -59,3 +59,13 @@ For more complicated functions, unit tests help with:
 Issue with functional tests: 
 * High-level makes them resistant to refactors. 
 * High-level makes them difficult to diagnose in case of error.
+
+### What we learned
+* Test interactivity using fireEvent.
+* jest-dom assertions:
+    * toBeEnabled()
+    * toBeDisabled()
+    * toBeChecked()
+* getByRole option {name: }
+* Jest describe global to group tests
+* Unit testing functions.
