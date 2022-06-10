@@ -40,3 +40,12 @@ and [another](https://www.npmjs.com/package/jest-css-modules-transform)
 The latter has more downloads per week, but the former seems to be more actively mantained.
 
 Another possibility would be to check explicitly for the class name (``hidden`` in this example) using ``.toHaveClass``. This would be simpler, but farther from the actual user experience (this is testing implementation details, rather than how the user seezs the page). It is always a balance, and I think either this approach or transforming the CSS would be defensible.
+
+## Unit testing functions
+Often in our React app, we will have functions that are separate from the components, and this might be because the functions are used by several components. It makes sense to have the logic in a central place.
+Other times the logic is complicated enough that it makes snese to separate it from the logic of the component itself.
+It is recommended to unit test this functions if:
+* The logic is complicated enough to test via functional tests.
+* Too many edge cases.
+
+This color button project is not going to have any functions that really merit unit testing.
