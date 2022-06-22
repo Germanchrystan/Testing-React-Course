@@ -22,10 +22,10 @@ The server is not needed for functional react app testing. We will mock response
 ## Bootstrap
 This project is going to use Bootstrap. Styling might not seem like a very important part of a testing course, but in fact it is, because we are going to be finding elements the way they appear on the page. The way they appear is going to vary by what styling we use. 
 
-We will start by installing react-bootstrap and bootstrap with 
+* We will start by installing react-bootstrap and bootstrap with 
 ´´´npm install react-bootstrap bootstrap´´´
 
-Then we add the following script tabs to head in the public/index.html file 
+* Then we add the following script tabs to head in the public/index.html file 
 <script src="https://unpkg.com/react/umd/react.production.min.js" crossorigin></script>
 
 <script
@@ -38,8 +38,12 @@ Then we add the following script tabs to head in the public/index.html file
 
 <script>var Alert = ReactBootstrap.Alert;</script>
 
-We also need to add the css import to index.js
+* We also need to add the css import to index.js
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-Finally, we are going to add styles to the body of the index.html file
+* Finally, we are going to add styles to the body of the index.html file
 <body style="background-color:teal, color:ivory">
+
+## File organization
+We are going to organize components by pages, with a test directory for each page.
+Jest will find and run any files that end in .test.js.
