@@ -47,3 +47,27 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 ## File organization
 We are going to organize components by pages, with a test directory for each page.
 Jest will find and run any files that end in .test.js.
+
+## Screen query methods
+commands
+- get: expect element to be in DOM
+- query: expect element not to be in DOM
+- find: expect element to appear async
+
+[All]
+- (exclude) expect only one match
+- (include) expect more than one match
+
+Query type
+- Role (most preferred)
+- AltText (images)
+- Text (display elements)
+- Form elements
+ - PlaceholderText
+ - LabelText
+ - DisplayValue
+
+ Recommended links 
+ https://testing-library.com/docs/dom-testing-library/api-queries
+ https://testing-library.com/docs/react-testing-library/cheatsheet/
+ https://testing-library.com/docs/guidl-which-query

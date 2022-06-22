@@ -57,10 +57,29 @@ This is where what styling we use makes a difference in how we do the tests.
 When this popover goes away, it isn't just hidden with styling, but removed from the DOM.
 This is a key difference when it comes to testing this component.
 */
-test('popover responds to hover', async() => {
-    // popover starts out hidden
 
+/*
+
+*/
+test('popover responds to hover', async() => {
+    const user = userEvent.setup();
+    render(<SummaryForm />);
+    // popover starts out hidden
+    const nullPopover = screen.queryByText(/no ice cream will actually be delivered/i) // Expected not to be there
+    expect(nullPopover).not.toBeInTheDocument();
     // popover appears upon mouseover of checkbox label
+    const termsAndConditions = screen.getByText(/terms and conditons/i);
+    user.hover(termsAndConditions);
+
+    /* 
+    getBy will throw if there is no match, so assetion is not really needed
+    but it will be included anyway for readability
+    */ 
+    const popover = screen.getByText(/no ice cream will actually be delivered/i) //Expected to be there
+    expect(popover).toBeInTheDocument();
 
     // popover disappears when we mouse out
+    user.unhover(termsAndConditions)
+    const nullPopoverAgain = screen.queryByText(/no ice cream will actually be delivered/i)
+    expect(nullPopoverAgain).not.toBeInTheDocument();
 })
