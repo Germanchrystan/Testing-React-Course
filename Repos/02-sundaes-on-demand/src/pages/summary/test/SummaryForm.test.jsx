@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import SummaryForm from './../SummaryForm';
 import userEvent from '@testing-library/user-event';
 /*
@@ -67,10 +67,10 @@ test('popover responds to hover', async() => {
     // popover starts out hidden
     const nullPopover = screen.queryByText(/no ice cream will actually be delivered/i) // Expected not to be there
     expect(nullPopover).not.toBeInTheDocument();
+   
     // popover appears upon mouseover of checkbox label
-    const termsAndConditions = screen.getByText(/terms and conditons/i);
-    user.hover(termsAndConditions);
-
+    const termsAndConditions = screen.getByText(/terms and conditions/i);
+    await user.hover(termsAndConditions);
     /* 
     getBy will throw if there is no match, so assetion is not really needed
     but it will be included anyway for readability
@@ -79,7 +79,11 @@ test('popover responds to hover', async() => {
     expect(popover).toBeInTheDocument();
 
     // popover disappears when we mouse out
-    user.unhover(termsAndConditions)
+    await user.unhover(termsAndConditions)
     const nullPopoverAgain = screen.queryByText(/no ice cream will actually be delivered/i)
-    expect(nullPopoverAgain).not.toBeInTheDocument();
+    await waitFor(() => expect(nullPopoverAgain).not.toBeInTheDocument()) /* 
+    needed waitFor in this case. This is a weird behaviour provocated by jest@27.5.1
+    In the example provided in the course jest@26.6.0, and there was no need to wrap the
+    assertion with waitFor.
+    */
 })
