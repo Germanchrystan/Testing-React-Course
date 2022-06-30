@@ -71,3 +71,19 @@ Query type
  https://testing-library.com/docs/dom-testing-library/api-queries
  https://testing-library.com/docs/react-testing-library/cheatsheet/
  https://testing-library.com/docs/guidl-which-query
+
+
+ # Simulating Data from Server
+We are going to mock the response we get from the server by using Mock Service Worker. We are not doing e2e here, we are doing functional tests, which generally don't involve the server.
+
+- First, we need to install mock service worker with the command
+```
+npm install msw
+```
+
+- Second, we need to set up handlers for the API requests. We created them in the src/mocks/handlers.js file.
+Here is a link to the [documentation related](https://mswjs.io/docs/basics/response-resolver)
+
+- Then we need to create a test server to handle requests. We need to make sure that the test server is listening for all the tests and intercepting those calls that would otherwise go out to the internet at large. For that, we set up a server in src/mocks/server.js
+
+We are also going to reset the server handlers after each test, so that if we messed with them during the test, we get a reset for the next test. For that, we added lines to the setupTests.js file.
