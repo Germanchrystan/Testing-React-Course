@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ScoopOption from './ScoopOption';
-import Row from 'react-bootstrap'
+import { Row } from 'react-bootstrap'
 
 function Options({optionType}) {
     const [items, setItems] = useState([])
