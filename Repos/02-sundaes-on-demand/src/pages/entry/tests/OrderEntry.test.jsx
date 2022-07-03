@@ -22,15 +22,12 @@ test.only('handles error for scoops and toppings routes', async() => {
     the matcher is going to take that one and the toHaveLength assertion will fail.
     That is why we need waitFor.
     */
-    return await waitFor(async() => {
-        return await screen.findAllByRole('alert', {
+    waitFor(async() => {
+        const alerts = await screen.findAllByRole('alert', {
             name: 'An unexpected error ocurred. Please try again later'
         })
-       
-    })
-    .then((alerts) =>{
         const alertsLength = alerts.length
         expect(alertsLength).toBe(2)
+       
     })
-    .catch(error => error);
 })
