@@ -102,3 +102,5 @@ server.resetHandlers(
 )
 ```
 This test suite also shows a ```test.only``` method. This signals to the test runner that this is the only test that should be run in this file. Tests can be skipped by using the ```test.skip``` method. 
+
+# React Context
