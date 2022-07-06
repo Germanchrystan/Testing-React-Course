@@ -87,3 +87,18 @@ Here is a link to the [documentation related](https://mswjs.io/docs/basics/respo
 - Then we need to create a test server to handle requests. We need to make sure that the test server is listening for all the tests and intercepting those calls that would otherwise go out to the internet at large. For that, we set up a server in src/mocks/server.js
 
 We are also going to reset the server handlers after each test, so that if we messed with them during the test, we get a reset for the next test. For that, we added lines to the setupTests.js file.
+
+# Simulating errors from the server
+We might want to test the cases in which the server returns an error. For this, we should overwrite the outcome of the endpoints from a particular test. An example of this is shown in OrderEntry tests.
+
+```
+server.resetHandlers(
+  rest.get('http://localhost:3030/scoops', (req, res, ctx) => 
+    res(ctx.status(500))
+  ),
+  rest.get('http://localhost:3030/toppings', (req, res, ctx) => 
+    res(ctx.status(500))
+  )
+)
+```
+This test suite also shows a ```test.only``` method. This signals to the test runner that this is the only test that should be run in this file. Tests can be skipped by using the ```test.skip``` method. 
