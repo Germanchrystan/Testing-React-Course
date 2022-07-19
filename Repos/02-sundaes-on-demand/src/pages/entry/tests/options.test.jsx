@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils/testing-library-utils';
 
-import Options from './../Options';
+import Options from '../Options';
 
 test('displays images for each scoop option from server', async() => {
     render(<Options optionType="scoops" />)
@@ -26,7 +26,7 @@ Code Quiz:
 - Update Options.jsx and create ToppingOption.jsx
 */
 
-test('display imatges for each topping option from server', async() => {
+test('display images for each topping option from server', async() => {
     render(<Options optionType="toppings" />)
     const toppingImages = await screen.findAllByRole('img', {name: /topping$/i});
     expect(toppingImages).toHaveLength(3)

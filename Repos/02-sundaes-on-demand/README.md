@@ -104,3 +104,8 @@ server.resetHandlers(
 This test suite also shows a ```test.only``` method. This signals to the test runner that this is the only test that should be run in this file. Tests can be skipped by using the ```test.skip``` method. 
 
 # React Context
+We are going to code the context that will allow out subtotal tests to pass. We are using context as a way to pass global state between components. To do that, we are going to use a pattern suggested by Jent C. Dodds, where we can have a context that has embedded state. The link for more information is [here](https://kentcdodds.com/blog/application-state-management-with-react)
+We basically will have a context file, which creates a context using the createContext hook with React. 
+Then within the file we will use the useContext hook to make a custom hook that will return this context, as long as it is within a provider. The provider is going to have a useState statement that is going to create an internal state, so that the context provider actually has state built in.
+Then the value for the provider is going to be an array, which contains the getter and the setter for the state. This way, any time someone runs the custom hook, they will get the context value, which can be destructured.
+So we will export the custom hoook for the components to import, and the provider. We will wrap any components that need it with the provider. In this case two of our components are going to need it: OrderEntry and OrderSummary. The OrderConfirmation does not need to know the details of the order, so it will not be wrapped. 

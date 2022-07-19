@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from './../../../test-utils/testing-library-utils';
 import OrderEntry from '../OrderEntry';
 // Overriding server
 import { rest } from 'msw';
