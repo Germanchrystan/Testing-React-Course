@@ -119,3 +119,86 @@ In these test we:
 - `userEvent.type` to enter number.
 - `wrapper` option to `render` to apply context provider.
 - Redefine Testing Library in `test-utils/testing-library-utils.jsx` to wrap all components rendered with the context provider.
+
+## "Not wrapped in act" error
+We will get this error when we finish the grand total tests.
+~~~
+Warning: An update to Options inside a test was not wrapped in act(...).
+~~~
+
+We would get a suggestion below this error, indicating that we use `act`, but that is not what we want to do.
+
+The `not wrapped in act` is related to the `Can't perform a React state update on an unmounted component` error.
+
+The reason is almost always that the component is changing after the test is over. Test function quits before state updates are complete. In this case we know what those async updates are.
+
+We are rendering OrderEntry, that renders Options components, and each of the Options components runs an Axios call. When the axios call returns, it updates the component. The tests are then saying that there's stuff going on in the component that we are not accounting for.
+
+This is caused by a race condition. 
+The test renders the component, in this case the OrderEntry component.
+The OrderEntry has children, which are the Options components that trigger network calls.
+Then this first test doesn't wait for those network calls to return.
+The assertion in the test succeeds that the grand total start out as zero. The function has nothing more to do so it exits. But when the test function exits, Testing Library does some cleanup and unmounts the components. In the meantime, the network calls still hasn't returned and it returns after the test is exited, after the component has been unmounted. That is when we get the warning.
+So we want to eliminate this race condition. We still want to render the component and make the network call that results from rendering the component. But we will add cleanup when the component mounts. And this is a good idea, not just for the tests, but if somebody navigates away from the component.
+In the production app, we probably want to cancel the network call in that case as well.
+
+So we will have cleanup when the component unmounts to cancel the network call. Then in the test, we will explicitly unmount the component. This will cancel the network call base on the work that we have done on the component. It will run the component cleanup function and cancel the network call.
+
+And all of this can happen before the test function exits. 
+
+In **Options.jsx** we will see the `useEffect` hook. We will add a new `AbortController()` instance. This is a JS object we can use to handle processes. We are going to attach this instance to the network request. we do that by sending a signal with the abort controller signal. That way, if we do an abort on the controller it will abourt the axios call as well.
+
+We will also add a return statement on useEffect to be triggered when the component is unmounted. This return statement will return a function that calls the abort method of the controller.
+
+Now, we need to consider that this clanup function might run on re render and not just on unmount.
+So in order to handle that, we need to make sure that the error is not set if we have a canceled network call. The way we do that is by checking the error name is not `CanceledError`. This will avoid having our component error out if this get called on re - render.
+
+~~~js
+useEffect(() => {
+  // create an abortController to attach to network request
+  const controller = new AbortController();
+
+  axios
+  .get(`http://localhost:3030/${optionType}`, { signal: controller.signal})
+  .then((response) => setItems(response.data))
+  .catch((error) => {
+    if(error.name !== "CanceledError") {
+      setError(true)
+    }
+  });
+  // abort axios call on component unmount
+  return () => {
+    controller.abort();
+  }
+}, [optionType])
+
+~~~
+
+Now the las t thing we need to do is make sure that we unmount the component before the test exits.
+Let's go back into the test.
+
+~~~js
+test('grand total starts at $0.00', () => {
+  render(<OrderEntry />);
+  const grandTotal = screen.getByRole('heading', {name: /grand total: \$/i}); 
+  expect(grandTotal).toHaveTextContent('0.00');
+});
+~~~
+
+We have to destructure the unmount from the return value of render.
+
+~~~js
+const { unmount } = render(<OrderEntry />)
+~~~
+
+and then run it at the end of the test.
+
+~~~js
+test('grand total starts at $0.00', () => {
+  const { unmount } = render(<OrderEntry />);
+  const grandTotal = screen.getByRole('heading', {name: /grand total: \$/i}); 
+  expect(grandTotal).toHaveTextContent('0.00');
+  unmount();
+});
+~~~
+

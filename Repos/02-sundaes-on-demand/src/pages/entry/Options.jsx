@@ -14,12 +14,23 @@ function Options({optionType}) {
     const { totals } = useOrderDetails();
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/${optionType}`)
-        .then(response => setItems(response.data))
+        // create an abortController to attach to network request
+        const controller = new AbortController();
+      
+        axios
+        .get(`http://localhost:3030/${optionType}`, { signal: controller.signal})
+        .then((response) => setItems(response.data))
         .catch((error) => {
+          if(error.name !== "CanceledError") {
             setError(true)
-        })
-    }, [optionType]);
+          }
+        });
+        // abort axios call on component unmount
+        return () => {
+          controller.abort();
+        }
+      }, [optionType])
+      
     
     if (error) {
         return <AlertBanner />;

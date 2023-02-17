@@ -1,6 +1,7 @@
 import {render, screen } from "./../../../test-utils/testing-library-utils";
 import userEvent from "@testing-library/user-event";
 import Options from '../Options';
+import OrderEntry from '../OrderEntry';
 
 
 test('updates scoop subtotal when scoops change', async() => {
@@ -98,4 +99,97 @@ test('Solutions provided by the teacher', async()=> {
     // remove hot fudge and check subtotal
     await user.click(hotFudgeCheckbox);
     expect(toppingsTotal).toHaveTextContent('1.50');
+})
+
+/**
+ * CODE QUIZ: Grand Total
+ * Should we do a "black box" test? 
+ * 
+ * For example: First update scoops, then toppings. 
+ * Should we also test updating toppings first then scoops?
+ * 
+ * We know from implementation that is shouldn't make a difference.
+ * User should be able to do either, and we might change implementation.
+ * 
+ * So yes, we should do a black box text and not consider implementation.
+ * 
+ * 
+ * Do test functions need to be async? Yes, options stiull need to load from
+ * server/ mock service worker. We need to await both the scoop element and
+ * the toppings element. 
+ * 
+ * How to find element
+ * For mockups, grand total should be the same size as titles(<h2>)
+ * we can search using the heading role
+ * 
+ * include the text in the name option. 
+ * Note: { exact: false } is not an option for *byRole
+ * 
+ * either use *byRole and regular expression for name option 
+ * screen.getByRole('heading', {name: /grand total: \$/i}); 
+ * 
+ * or use a *byText and { exact: false }
+ * screen.getByText('Grand total: $', { exact: false }); 
+ */
+
+describe('grand total', () => {
+    test('grand total starts at $0.00', () => {
+        const { unmount } = render(<OrderEntry />);
+        const grandTotal = screen.getByRole('heading', {name: /grand total: \$/i}); 
+        expect(grandTotal).toHaveTextContent('0.00');
+        unmount();
+    });
+    test('grand total updates properly if scoop is added first', async() => {
+        // Setting up user
+        const user = userEvent.setup();
+        // Rendering Order Entry and getting the grand total element
+        const { unmount } = render(<OrderEntry />);
+        const grandTotal = screen.getByRole('heading', {name: /grand total: \$/i});
+        // Changing scoop input
+        const vanillaInput = await screen.findByRole('spinbutton', { name: "Vanilla" })
+        await user.clear(vanillaInput); 
+        await userEvent.type(vanillaInput, '1');
+        // Assert new total amount
+        expect(grandTotal).toHaveTextContent('2.00');
+        unmount();
+    });
+    test('grand total updates properly if topping is added first', async() => {
+        // Setting up user
+        const user = userEvent.setup();
+        // Rendering Order Entry and getting the grand total element
+        render(<OrderEntry />);
+        const grandTotal = screen.getByRole('heading', {name: /grand total: \$/i});
+        // Getting topping checkboxes
+        const checkboxInputs = await screen.findAllByRole('checkbox');
+        await user.click(checkboxInputs[0]);
+        // Assert new total amount
+        expect(grandTotal).toHaveTextContent('1.50');
+    });
+    test('grand total updates properly if item is removed', async() => {
+        // Setting up user
+        const user = userEvent.setup();
+        // Rendering Order Entry and getting the grand total element
+        render(<OrderEntry />);
+        const grandTotal = screen.getByRole('heading', {name: /grand total: \$/i});
+        // Getting scoop input
+        const vanillaInput = await screen.findByRole('spinbutton', { name: "Vanilla" })
+        // Getting topping inputs
+        const checkboxInputs = await screen.findAllByRole('checkbox');
+        
+        // Add to both inputs
+        await user.clear(vanillaInput); 
+        await userEvent.type(vanillaInput, '1');
+        await user.click(checkboxInputs[0]);
+        // Assert new total amount
+        expect(grandTotal).toHaveTextContent('3.50');
+        
+        // Remove scoop
+        await user.clear(vanillaInput);
+        expect(grandTotal).toHaveTextContent('1.50');
+
+        // Remove topping
+        await user.click(checkboxInputs[0]);
+        expect(grandTotal).toHaveTextContent('0.00');
+
+    });
 })
