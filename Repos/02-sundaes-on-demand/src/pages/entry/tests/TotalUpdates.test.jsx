@@ -70,3 +70,32 @@ test('updates toppings subtotal when toppings change', async() => {
     await user.click(checkboxInputs[0]); 
     expect(toppingsSubtotal).toHaveTextContent('1.50');
 });
+
+/**
+ * In the solutions provided by the teacher, 
+ * the checkboxes are reached with the name of the
+ * label provided for each input.
+ * 
+ * This is just a different approach to the tests. Both are valid.
+ */
+test('Solutions provided by the teacher', async()=> {
+    const user = userEvent.setup();
+    render(<Options optionType="toppings" />);
+
+    const toppingsTotal = screen.getByText("toppings total: $", { exact: false });
+    expect(toppingsTotal).toHaveTextContent('0.00');
+
+    // add cherries and check subtotal
+    const cherriesCheckbox = await screen.findByRole("checkbox", { name: "Cherries" });
+    await user.click(cherriesCheckbox);
+    expect(toppingsTotal).toHaveTextContent('1.50');
+
+    // add hot fudge and check subtotal
+    const hotFudgeCheckbox = screen.getByRole("checkbox", { name: "Hot Fudge" });
+    await user.click(hotFudgeCheckbox);
+    expect(toppingsTotal).toHaveTextContent('3.00');
+
+    // remove hot fudge and check subtotal
+    await user.click(hotFudgeCheckbox);
+    expect(toppingsTotal).toHaveTextContent('1.50');
+})
