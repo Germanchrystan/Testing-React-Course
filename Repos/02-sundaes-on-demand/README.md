@@ -201,4 +201,27 @@ test('grand total starts at $0.00', () => {
   unmount();
 });
 ~~~
+### Why is the explicit unmount needed
+You mayt have the same question I had at this point:
 
+If Testing Library unmounts the component as part of test cleanup, why is it necessary to explicitly unmount the component? 
+Shouldn't the useEffect return function that aborts the axios request work just as well with the automatic unmount done by Testing Library
+as it does with the explicit unmount?
+
+The answer is yes, the automatic unmount should trigger the useEffect return function and eliminate the "not wrapped in act()" error. But, unfortunately, it doesn't. You can read a discussion (without a satisfying conclusion, sadly) in this [Issue](https://meli.udemy.com/course/react-testing-library/learn/lecture/35709102#overview:~:text=conclusion%2C%20sadly)%20in-,this%20GitHub%20issue,-).
+
+# Final Exam : Order Phases
+On the implementation, the app is going to have an order phase state. It is going to pass the state setter (`setOrderPhase`) to components as prop.
+Component call setOderPhase to move to the next phase.
+In OrderEntry we will be in a `inProgress` state, then in OrderSummary we will be in a `review` state, and finally in OrderConfirmation we will have a `complete` state.
+
+#### What to test
+We are going to test what is call "Happy path" (aka "Happy day" or "Golden path"). This is a suite of tests that execute customer flow without error.
+
+For our app:
+- Create order
+- Accept terms and submit
+- Click "new order" on confirmation page.
+
+We don't need to test different combinations of orders. That is covered in the OrderEntry test.
+The new tests will be written in a test directory at the top level of the src directory. This is a functional test, so we will call it `OrderPhase`
