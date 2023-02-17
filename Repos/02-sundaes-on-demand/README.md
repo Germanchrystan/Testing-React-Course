@@ -264,3 +264,18 @@ Other links:
 - [Unable to find role](https://github.com/testing-library/react-testing-library/issues/835)
 - [About queries](https://testing-library.com/docs/queries/about/#byrole)
 - [waitFor](https://testing-library.com/docs/dom-testing-library/api-async/)
+
+## Standard questions to ask when writing a new test
+- What to render?
+  - what is the smallest component that encompasses tests?
+- Do we need to pass any props?
+- Do we need to wrap in a provider?
+  - Does the provider get used? Is it already wrapped within the component?
+- Where should the test go?
+  - which file? New file needed? Functional or unit?
+- What to test?
+  - What is the behaviour that needs testing?
+- How to test?
+  - What queries and events?
+- Do we need to `await`?
+  - Is there anything async going on?

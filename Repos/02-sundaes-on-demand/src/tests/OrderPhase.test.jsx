@@ -68,4 +68,64 @@ test('order phases for happy path', async() => {
     
     // unmount the component to trigger cleanup and avoid "not wrapped in act()" error
     unmount();
+});
+
+
+test('order phases for happy path - without topping selection', async() => {
+    const user = userEvent.setup();
+    // render app
+    const { unmount } = render(<App />);
+
+    // add ice cream scoops and toppings
+    // scoops
+    const vanillaInput = await screen.findByRole('spinbutton', { name: "Vanilla" })
+    await user.clear(vanillaInput); // Cleans the input to avoid wrong inputs
+    await userEvent.type(vanillaInput, '1');
+
+    // find and click order button
+    const orderEntryButton = screen.getByRole('button', { name: 'Order Sundae!'});
+    await user.click(orderEntryButton);
+
+    // check summary information based on order
+    const scoopSubtotal = screen.getByRole('heading', { name: /scoops: /i});
+    expect(scoopSubtotal).toHaveTextContent('2.00');
+
+    const toppingSubtotal = screen.queryByRole('heading', {name: /toppings: /i});
+    expect(toppingSubtotal).not.toBeInTheDocument();
+    
+    // unmount the component to trigger cleanup and avoid "not wrapped in act()" error
+    unmount();
+})
+
+test('order phases for happy path - with topping selected and then removed', async() => {
+    const user = userEvent.setup();
+    // render app
+    const { unmount } = render(<App />);
+
+    // add ice cream scoops and toppings
+    // scoops
+    const vanillaInput = await screen.findByRole('spinbutton', { name: "Vanilla" })
+    await user.clear(vanillaInput); // Cleans the input to avoid wrong inputs
+    await userEvent.type(vanillaInput, '1');
+
+    // toppings selected and then removed
+    const checkboxInputs = await screen.findAllByRole('checkbox');
+    await user.click(checkboxInputs[0]);
+    await user.click(checkboxInputs[1]);
+    await user.click(checkboxInputs[0]);
+    await user.click(checkboxInputs[1]);
+
+    // find and click order button
+    const orderEntryButton = screen.getByRole('button', { name: 'Order Sundae!'});
+    await user.click(orderEntryButton);
+
+    // check summary information based on order
+    const scoopSubtotal = screen.getByRole('heading', { name: /scoops: /i});
+    expect(scoopSubtotal).toHaveTextContent('2.00');
+
+    const toppingSubtotal = screen.queryByRole('heading', {name: /toppings: /i});
+    expect(toppingSubtotal).not.toBeInTheDocument();
+    
+    // unmount the component to trigger cleanup and avoid "not wrapped in act()" error
+    unmount();
 })
