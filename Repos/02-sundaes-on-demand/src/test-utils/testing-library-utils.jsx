@@ -5,4 +5,4 @@ const renderWithContext = (ui, options) => render(ui, { wrapper: OrderDetailsPro
 
 // re-export everything
 export * from '@testing-library/react';
-export {renderWithContext as render}
+export { renderWithContext as render }

@@ -11,7 +11,7 @@ import { formatCurrency } from '../../utilities'
 function Options({optionType}) {
     const [items, setItems] = useState([])
     const [error, setError] = useState(false)
-    const [orderDetails, updateItemCount] = useOrderDetails();
+    const { totals } = useOrderDetails();
 
     useEffect(() => {
         axios.get(`http://localhost:3030/${optionType}`)
@@ -41,7 +41,7 @@ function Options({optionType}) {
     <>
         <h2>{title}</h2>
         <p>{formatCurrency(pricePerItem[optionType])} each</p>
-        <p>{title} total: {orderDetails.totals[optionType]}</p>
+        <p>{title} total: {formatCurrency(totals[optionType])}</p>
         <Row>{optionItems}</Row>
     </>
     )

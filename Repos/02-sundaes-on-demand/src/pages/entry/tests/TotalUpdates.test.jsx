@@ -2,6 +2,7 @@ import {render, screen } from "./../../../test-utils/testing-library-utils";
 import userEvent from "@testing-library/user-event";
 import Options from '../Options';
 
+
 test('updates scoop subtotal when scoops change', async() => {
     const user = userEvent.setup();
     render(<Options optionType="scoops"/>);
@@ -21,10 +22,7 @@ test('updates scoop subtotal when scoops change', async() => {
     // So we will be using a findByRole with async/await
     const vanillaInput = await screen.findByRole('spinbutton', { name: "Vanilla" })
     await user.clear(vanillaInput); // Cleans the input to avoid wrong inputs
-    userEvent.type(vanillaInput, '1'); /** This user event is done differently in the course, since it is a different version of the library
-     * const user = userEvent.setup();
-     * await user.type(vanillaInput. '1');
-     */
+    await userEvent.type(vanillaInput, '1');
 
     expect(scoopsSubtotal).toHaveTextContent('2.00');
 
@@ -33,6 +31,6 @@ test('updates scoop subtotal when scoops change', async() => {
     //========================================================//
     const chocolateInput = await screen.findByRole('spinbutton', { name: "Chocolate" });
     await user.clear(chocolateInput);
-    userEvent.type(chocolateInput, '2');
-    expect(scoopSubtotal).toHaveTextContent('6.00');
+    await userEvent.type(chocolateInput, '2');
+    expect(scoopsSubtotal).toHaveTextContent('6.00');
 })
