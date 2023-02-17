@@ -33,4 +33,40 @@ test('updates scoop subtotal when scoops change', async() => {
     await user.clear(chocolateInput);
     await userEvent.type(chocolateInput, '2');
     expect(scoopsSubtotal).toHaveTextContent('6.00');
-})
+});
+
+/**
+ * CODE QUIZ: write tests for toppings subtotal
+ * - Assert on default toppings subtotal
+ * - Find and tick one box, assert on updated subtotal (see src/mocks/handlers.js for server response(which toppings))
+ * - Use await and find for checkbox(async)
+ * - Tick another box on, assert on subtotal
+ * - Tick one of the boxes off (click it again) and assert on subtotal.
+ */
+test('updates toppings subtotal when toppings change', async() => {
+    const user = userEvent.setup();
+    render(<Options optionType="toppings"/>);
+    
+    // Default value
+    const toppingsSubtotal = screen.getByText('Toppings total: $', { exact: false });
+    expect(toppingsSubtotal).toHaveTextContent('0.00');
+
+    // Checkboxes
+    const checkboxInputs = await screen.findAllByRole('checkbox');
+    expect(checkboxInputs.length).toBe(3);
+
+    // Check first box
+    await user.click(checkboxInputs[0]);
+    expect(toppingsSubtotal).toHaveTextContent('1.50');
+
+    // Uncheck first box
+    await user.click(checkboxInputs[0]);
+    expect(toppingsSubtotal).toHaveTextContent('0.00');
+
+    // Click two boxes
+    await user.click(checkboxInputs[0]);
+    await user.click(checkboxInputs[1]);
+    expect(toppingsSubtotal).toHaveTextContent('3.00');
+    await user.click(checkboxInputs[0]); 
+    expect(toppingsSubtotal).toHaveTextContent('1.50');
+});

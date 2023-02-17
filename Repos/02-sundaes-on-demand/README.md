@@ -109,3 +109,13 @@ We basically will have a context file, which creates a context using the createC
 Then within the file we will use the useContext hook to make a custom hook that will return this context, as long as it is within a provider. The provider is going to have a useState statement that is going to create an internal state, so that the context provider actually has state built in.
 Then the value for the provider is going to be an array, which contains the getter and the setter for the state. This way, any time someone runs the custom hook, they will get the context value, which can be destructured.
 So we will export the custom hoook for the components to import, and the provider. We will wrap any components that need it with the provider. In this case two of our components are going to need it: OrderEntry and OrderSummary. The OrderConfirmation does not need to know the details of the order, so it will not be wrapped. 
+
+# Review of Tests: Scoops Subtotal with Context
+In these test we:
+- Used `getByText` to find total. We used the `exact` option set to `false`, because we only used a partial string.
+- Number inputs: we used `await` and `findBy` to get values that are coming from the server.
+- Use of `Spinbutton` role to access components.
+- `userEvent.clear` to clear existing text in the input.
+- `userEvent.type` to enter number.
+- `wrapper` option to `render` to apply context provider.
+- Redefine Testing Library in `test-utils/testing-library-utils.jsx` to wrap all components rendered with the context provider.
