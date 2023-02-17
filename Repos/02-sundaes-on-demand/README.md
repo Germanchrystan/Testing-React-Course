@@ -250,3 +250,17 @@ test("button has correct initial color", () => {
 | Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application| There was an update to the component state after the test completed. Use `useEffect` cleanup and `unmount()`|
 | Error: connect ECONNREFUSED 127.0.0.1 | There is no Mock Service Worker handler associated with this route and method |
 
+## Jest placeholder function
+We can pass a placeholder function in our React components to replace functions passed as props, by using `jest.fn()`. This is functionality provided by Jest that we could use in tests to replace, for example, the `setOrderPhase` setter passed to OrderEntry, or any other components.
+
+~~~jsx
+render(<OrderEntry setOrderPhase={jest.fn()}/>);
+~~~
+
+## Common Mistakes with React Testing Library
+Now that you've completed the content portion of the course, you might want to take a look at Kent C. Dodd's post on [Common Mistakes with React Testing Library](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library). A lot of these recommendations have been covered in the course (for example, use [*byRole when possible](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-byrole-most-of-the-time), and [user-event over fireEvent](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-testing-libraryuser-event)), and some of them are holdovers from previous versions that don't apply if you're starting with the latest version (for example, [destructuring the render return value rather than using screen](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-screen)).
+
+Other links:
+- [Unable to find role](https://github.com/testing-library/react-testing-library/issues/835)
+- [About queries](https://testing-library.com/docs/queries/about/#byrole)
+- [waitFor](https://testing-library.com/docs/dom-testing-library/api-async/)
