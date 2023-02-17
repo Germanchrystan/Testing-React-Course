@@ -225,3 +225,28 @@ For our app:
 
 We don't need to test different combinations of orders. That is covered in the OrderEntry test.
 The new tests will be written in a test directory at the top level of the src directory. This is a functional test, so we will call it `OrderPhase`
+
+## Debugging tips
+- We can always add screen.debug() to see in console the structure of the virtual DOM at that point in the test.
+- We can also log the roles in the virtual DOM with the `logRoles` method.
+
+~~~js
+import { logRoles } from "@testing-library/dom";
+
+test("button has correct initial color", () => {
+  const { container } = render(<App />);
+  logRoles(container);
+})
+~~~
+
+- Does `getBy*` fail when there is a server call or other async action? You need to use `await` and `findBy*`. The `userEvent` method also need to have an `await`. All the `userEvent` methods are promises and need to be awaited. 
+
+### Resolving errors from tests
+
+| Error      | Possible Cause |
+| ----------- | ----------- |
+| Unable to find role="role"      | Either role (for example, button) doesn't exist, or no element with that role that also matches name option|
+| Warning: An update to component inside a test was not wrapped in act(...)   | There was an update to the component after the test completed. Use `useEffect` cleanup and `unmount()`|
+| Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application| There was an update to the component state after the test completed. Use `useEffect` cleanup and `unmount()`|
+| Error: connect ECONNREFUSED 127.0.0.1 | There is no Mock Service Worker handler associated with this route and method |
+

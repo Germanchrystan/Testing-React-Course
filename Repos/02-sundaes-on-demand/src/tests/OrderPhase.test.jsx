@@ -6,7 +6,7 @@ import App from '../App';
 test('order phases for happy path', async() => {
     const user = userEvent.setup();
     // render app
-    render(<App />);
+    const { unmount } = render(<App />);
 
     // add ice cream scoops and toppings
     // scoops
@@ -34,13 +34,22 @@ test('order phases for happy path', async() => {
     const termsAndConditionsButton = screen.getByRole('button', {name: /confirm order/i});
     await user.click(termsAndConditionsButton);
 
+    // get loading screen
+    const loading = screen.getByText('Loading');
+    expect(loading).toBeInTheDocument();
+
     // confirm order number on confirmation page
     const thankYouHeading = await screen.findByRole('heading');
     expect(thankYouHeading).toHaveTextContent("Thank you!");
 
     const orderNumberParagraph = await screen.findByText("your order number is", {exact: false});
     expect(orderNumberParagraph).toBeInTheDocument();
-    
+    expect(orderNumberParagraph).toHaveTextContent('123455676');
+
+    // loading no longer showing
+    const notLoading = screen.queryByText("Loading");
+    expect(notLoading).not.toBeInTheDocument();
+
     // click new order button on confirmation page
     const newOrderButton = screen.getByRole('button', {name: "Create new order"});
     expect(newOrderButton).toBeInTheDocument();
@@ -56,5 +65,7 @@ test('order phases for happy path', async() => {
 
     const toppingsTotal = screen.getByText("toppings total: $", { exact: false });
     expect(toppingsTotal).toHaveTextContent('0.00');
-    // do we need to await anything to avoid test errors?
+    
+    // unmount the component to trigger cleanup and avoid "not wrapped in act()" error
+    unmount();
 })
