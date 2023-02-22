@@ -2,7 +2,7 @@
 React testing library has a strong philosophy behind it. It is what we call opinionated, which means the way the library is written encourages a certain set of practices.
 * Test your software the way users actually use it.
     * Instead of testing internal implementation, test whether or not the software works the way it is supposed to. How the code is written can change, and as long as the software is still behaving according to the specifications, then the tests will still pass.
-* Fin elements byu accessibility markes, not test IDs.
+* Find elements by accessibility markes, not test IDs.
 
 # React Testing Library vs Jest
 * React testing library provides a virtual DOM for tests. Jest on the other hand, is a test runner. It is responsible for finding tests, running them, and determining whether the tests pass or fail.
@@ -15,41 +15,41 @@ It also catches errors in code, like using a variable before defining, and impor
 ## Linting vs. Formatting
 Formatters (like prettiers) automatically format code (indents, spacing). 
 Example 
-```
+~~~js
 import {useEffect} from 'react';
-```js
+~~~
 Would be formatted to look like this (spaces between brackets)
-```js
+~~~js
 import { useEffect } from 'react';
-```
+~~~
 
 Linters address format and style. 
 For example, they can enforce a preferred assertion method.
-```
+~~~js
 expect(checkbox).toHaveAttribute(checked);
-```
+~~~
 Would turn into
-```
+~~~js
 expect(checkbox).toBeChecked();
-```
+~~~
 
 ESLint has the concept of plugins, which we can use to extend the rules for it. A mayor benefit of RTL and JestDOM is that they have excellent plugins. This rules enforce the best practices. The plugins are highly customizable, and we can decide which rules we want and which ones we don't. 
 For more information, you can check this [link] (https://github.com/testing-library/eslint-plugin-testing-library)
 And [this one](https://github.com/testing-library/eslint-plugin-jest-dom)
 
 We install this linters by entering the following command
-`
+~~~
 npm install eslint-plugin-testing-library eslint-plugin-jest-dom
-`
+~~~
 This will install the ESLint dependencies. Now, we have to go to the package.json, and delete the following part
-`
+~~~json
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
   },
-`
+~~~
 In the root folder, we create a file called ``.eslintrc.json``. The file will contain the following settings:
 {
     "plugins": [
